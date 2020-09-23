@@ -1,8 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
-import "../styles.css";
+import "../shared/style-imports";
 
 import $ from "jquery";
 import "bootstrap/dist/js/bootstrap";
+
+import "@progress/kendo-ui/js/kendo.tabstrip";
 
 import { pushUrl, getQueryParameter } from "../utils/url";
 import { DetailPageModel } from "./detail-page-model";
@@ -81,6 +82,24 @@ detailPageModel.item$.subscribe((item) => {
 });
 
 $(() => {
+  const tabstripOptions = {
+    select: (e) => {
+      const selScreen = e.item.textContent.trim().toLowerCase();
+      pushUrl(
+        "",
+        "page-detail/detail.html",
+        `?screen=${selScreen}&itemId=${detailPageModel.itemId}`
+      );
+      detailPageModel.currentScreen = selScreen;
+      detailPageModel.refresh();
+    },
+  };
+  $(`[data-tab-title="${detailPageModel.currentScreen}"]`).addClass(
+    "k-state-active"
+  );
+  $("#tabstrip").kendoTabStrip(tabstripOptions);
+
+  /*
   $(".btn-screen-switch").click((e) => {
     const selScreen = $(e.currentTarget).attr("data-screen");
     pushUrl(
@@ -91,6 +110,7 @@ $(() => {
     detailPageModel.currentScreen = selScreen;
     detailPageModel.refresh();
   });
+  */
 });
 
 function renderPageChanges(item) {
