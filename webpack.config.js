@@ -12,7 +12,7 @@ module.exports = {
     detail: "./src/page-detail/index.js",
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    static: path.join(__dirname, "dist"),
     port: 8081,
   },
   module: {
@@ -57,18 +57,33 @@ module.exports = {
     ],
   },
   plugins: [
+
     new CopyWebpackPlugin(
-      [{ from: "src/page-dashboard/**", to: "page-dashboard/", flatten: true }],
-      { ignore: ["**/*.js", "**/*.css"] }
+      {
+        patterns: [
+          { from: "src/page-dashboard", 
+            to: "page-dashboard",
+            globOptions: {
+              ignore: ["**/*.js", "**/*.css"]
+            }
+          },
+          { from: "src/page-backlog", 
+            to: "page-backlog",
+            globOptions: {
+              ignore: ["**/*.js", "**/*.css"]
+            }
+          },
+          { from: "src/page-detail", 
+            to: "page-detail",
+            globOptions: {
+              ignore: ["**/*.js", "**/*.css"]
+            }
+          },
+        ],
+      }
     ),
-    new CopyWebpackPlugin(
-      [{ from: "src/page-backlog/**", to: "page-backlog/", flatten: true }],
-      { ignore: ["**/*.js", "**/*.css"] }
-    ),
-    new CopyWebpackPlugin(
-      [{ from: "src/page-detail/**", to: "page-detail/", flatten: true }],
-      { ignore: ["**/*.js", "**/*.css"] }
-    ),
+
+
   ],
   resolve: {
     extensions: [".js", ".css"],
